@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volume Gambler</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
@@ -20,38 +21,43 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
         }
         
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            width: 100%;
         }
         
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
             color: #0fd3d3;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 10px;
         }
         
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #f0f0f0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
+            gap: 25px;
             max-width: 900px;
             width: 100%;
         }
         
         .audio-controls {
             background: rgba(0, 0, 0, 0.4);
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
             width: 100%;
             display: flex;
@@ -61,7 +67,7 @@
         }
         
         .volume-display {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 15px;
             text-align: center;
             font-weight: bold;
@@ -108,8 +114,8 @@
         }
         
         .slot {
-            width: 100px;
-            height: 120px;
+            width: 90px;
+            height: 110px;
             background: #000;
             border: 3px solid #d4af37;
             border-radius: 10px;
@@ -121,11 +127,12 @@
         .slot-inner {
             position: absolute;
             width: 100%;
-            transition: top 4s cubic-bezier(0.16, 1, 0.3, 1);
+            top: 0;
+            transition: top 0.1s linear;
         }
         
         .slot-item {
-            height: 120px;
+            height: 110px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -134,40 +141,12 @@
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
         }
         
-        .lever {
-            width: 40px;
-            height: 150px;
-            background: linear-gradient(to right, #888, #aaa, #888);
-            border: 3px solid #666;
-            border-radius: 10px;
-            position: relative;
-            cursor: pointer;
-            margin-left: 20px;
-            transform-origin: top center;
-            transition: transform 0.3s ease;
-        }
-        
-        .lever.handle {
-            height: 40px;
-            width: 60px;
-            background: linear-gradient(to bottom, #d4af37, #f9e076);
-            border: 3px solid #b8860b;
-            border-radius: 10px;
-            position: absolute;
-            bottom: 0;
-            left: -10px;
-        }
-        
-        .lever.pulled {
-            transform: rotate(-25deg);
-        }
-        
         .spin-button {
             background: linear-gradient(to bottom, #d4af37, #b8860b);
             color: #000;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
+            padding: 15px 50px;
+            font-size: 1.5rem;
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
@@ -201,6 +180,9 @@
             min-height: 60px;
             color: #0fd3d3;
             text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .win {
@@ -218,7 +200,7 @@
             padding: 20px;
             border-radius: 15px;
             width: 100%;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         
         .instructions h2 {
@@ -229,12 +211,13 @@
         
         .instructions ul {
             list-style-type: none;
-            padding: 0 20px;
+            padding: 0 15px;
         }
         
         .instructions li {
             margin-bottom: 10px;
             line-height: 1.5;
+            font-size: 0.95rem;
         }
         
         @keyframes glow {
@@ -252,6 +235,10 @@
                 font-size: 2rem;
             }
             
+            .subtitle {
+                font-size: 1rem;
+            }
+            
             .slot {
                 width: 70px;
                 height: 90px;
@@ -259,19 +246,49 @@
             
             .slot-item {
                 height: 90px;
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
             
-            .lever {
-                height: 120px;
-                width: 30px;
+            .spin-button {
+                padding: 12px 40px;
+                font-size: 1.3rem;
             }
             
-            .lever.handle {
-                height: 30px;
-                width: 50px;
-                left: -10px;
+            .volume-display {
+                font-size: 1.5rem;
             }
+            
+            .result {
+                font-size: 1.2rem;
+                min-height: 50px;
+            }
+            
+            .instructions {
+                padding: 15px;
+            }
+            
+            .instructions li {
+                font-size: 0.85rem;
+            }
+        }
+        
+        .win-animation {
+            animation: winPulse 0.5s infinite;
+        }
+        
+        @keyframes winPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .reel-spin {
+            animation: reelSpin 0.1s infinite linear;
+        }
+        
+        @keyframes reelSpin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-110px); }
         }
     </style>
 </head>
@@ -299,35 +316,34 @@
                     <div class="slot-inner" id="slot1">
                         <div class="slot-item">🔊</div>
                         <div class="slot-item">🔇</div>
-                        <div class="slot-item">🔊</div>
                         <div class="slot-item">🔈</div>
                         <div class="slot-item">🔊</div>
+                        <div class="slot-item">🔇</div>
                     </div>
                 </div>
                 <div class="slot">
                     <div class="slot-inner" id="slot2">
                         <div class="slot-item">🔊</div>
                         <div class="slot-item">🔇</div>
-                        <div class="slot-item">🔊</div>
                         <div class="slot-item">🔈</div>
                         <div class="slot-item">🔊</div>
+                        <div class="slot-item">🔇</div>
                     </div>
                 </div>
                 <div class="slot">
                     <div class="slot-inner" id="slot3">
                         <div class="slot-item">🔊</div>
                         <div class="slot-item">🔇</div>
-                        <div class="slot-item">🔊</div>
                         <div class="slot-item">🔈</div>
                         <div class="slot-item">🔊</div>
+                        <div class="slot-item">🔇</div>
                     </div>
-                </div>
-                <div class="lever" id="lever">
-                    <div class="lever handle"></div>
                 </div>
             </div>
             
-            <button class="spin-button" id="spin-button">PULL TO SPIN</button>
+            <button class="spin-button" id="spin-button">
+                <i class="fas fa-dice"></i> SPIN
+            </button>
             
             <div class="result" id="result">Ready to spin!</div>
         </div>
@@ -335,11 +351,12 @@
         <div class="instructions">
             <h2>How to Play</h2>
             <ul>
-                <li>➤ Click the PULL TO SPIN button or pull the lever to start the slot machine</li>
+                <li>➤ Click the SPIN button to start the slot machine</li>
                 <li>➤ Match 3 symbols to win a volume boost</li>
                 <li>➤ The volume increases with each winning spin</li>
                 <li>➤ Different combinations give different volume levels</li>
-                <li>➤ If you lose, the volume decreases</li>
+                <li>➤ If you lose, the volume decreases slightly</li>
+                <li>➤ Volume will never go below 5% or above 95%</li>
             </ul>
         </div>
     </div>
@@ -353,7 +370,6 @@
             const slot1 = document.getElementById('slot1');
             const slot2 = document.getElementById('slot2');
             const slot3 = document.getElementById('slot3');
-            const lever = document.getElementById('lever');
             const spinButton = document.getElementById('spin-button');
             const result = document.getElementById('result');
             
@@ -369,10 +385,10 @@
             // Slot symbols and their values
             const symbols = ['🔊', '🔇', '🔈'];
             const symbolValues = {
-                '🔊🔊🔊': 0.8,  // High volume
-                '🔈🔈🔈': 0.5,  // Medium volume
-                '🔇🔇🔇': 0.1,  // Low volume
-                'default': -0.1  // Default change for non-matching
+                '🔊🔊🔊': 0.25,  // Big volume increase
+                '🔈🔈🔈': 0.15,  // Medium volume increase
+                '🔇🔇🔇': -0.15, // Volume decrease
+                'default': -0.05  // Default change for non-matching
             };
             
             // Spin state
@@ -419,33 +435,38 @@
                 result.textContent = "Spinning...";
                 result.className = "result";
                 
-                // Pull the lever animation
-                lever.classList.add('pulled');
+                // Add spinning animation class
+                slot1.classList.add('reel-spin');
+                slot2.classList.add('reel-spin');
+                slot3.classList.add('reel-spin');
                 
                 // Generate random final positions for each slot
-                const slot1Pos = -Math.floor(Math.random() * 5) * 120;
-                const slot2Pos = -Math.floor(Math.random() * 5) * 120;
-                const slot3Pos = -Math.floor(Math.random() * 5) * 120;
-                
-                // Apply spinning animation
-                slot1.style.top = `${slot1Pos}px`;
-                slot2.style.top = `${slot2Pos}px`;
-                slot3.style.top = `${slot3Pos}px`;
+                const slot1FinalPos = -Math.floor(Math.random() * 5) * 110;
+                const slot2FinalPos = -Math.floor(Math.random() * 5) * 110;
+                const slot3FinalPos = -Math.floor(Math.random() * 5) * 110;
                 
                 // Get the resulting symbols
-                const symbol1 = symbols[Math.abs(slot1Pos / 120) % symbols.length];
-                const symbol2 = symbols[Math.abs(slot2Pos / 120) % symbols.length];
-                const symbol3 = symbols[Math.abs(slot3Pos / 120) % symbols.length];
+                const symbol1 = symbols[Math.abs(slot1FinalPos / 110) % symbols.length];
+                const symbol2 = symbols[Math.abs(slot2FinalPos / 110) % symbols.length];
+                const symbol3 = symbols[Math.abs(slot3FinalPos / 110) % symbols.length];
                 
                 // Calculate result after animation completes
                 setTimeout(() => {
+                    // Remove spinning animation
+                    slot1.classList.remove('reel-spin');
+                    slot2.classList.remove('reel-spin');
+                    slot3.classList.remove('reel-spin');
+                    
+                    // Set final positions
+                    slot1.style.top = `${slot1FinalPos}px`;
+                    slot2.style.top = `${slot2FinalPos}px`;
+                    slot3.style.top = `${slot3FinalPos}px`;
+                    
                     const volumeChange = calculateResult(symbol1, symbol2, symbol3);
                     
-                    // Update volume
+                    // Update volume with limits (5% to 95%)
                     volume += volumeChange;
-                    
-                    // Keep volume between 0 and 1
-                    volume = Math.max(0, Math.min(1, volume));
+                    volume = Math.max(0.05, Math.min(0.95, volume));
                     audioPlayer.volume = volume;
                     
                     // Update display
@@ -455,6 +476,8 @@
                     if (volumeChange > 0) {
                         result.textContent = `JACKPOT! Volume increased to ${Math.round(volume * 100)}%`;
                         result.className = "result win";
+                        result.classList.add('win-animation');
+                        setTimeout(() => result.classList.remove('win-animation'), 1500);
                     } else if (volumeChange < 0) {
                         result.textContent = `No match! Volume decreased to ${Math.round(volume * 100)}%`;
                         result.className = "result lose";
@@ -463,33 +486,24 @@
                         result.className = "result";
                     }
                     
-                    // Reset lever and enable button
-                    setTimeout(() => {
-                        lever.classList.remove('pulled');
-                        isSpinning = false;
-                        spinButton.disabled = false;
-                    }, 1000);
+                    // Enable button
+                    isSpinning = false;
+                    spinButton.disabled = false;
                     
-                }, 4000); // Match the CSS transition time
+                }, 2000); // Match the spinning animation time
             }
             
             // Event listeners
             spinButton.addEventListener('click', spinSlots);
             
-            lever.addEventListener('click', function() {
-                if (!isSpinning) {
-                    spinSlots();
-                }
-            });
-            
             // Try to autoplay the audio
             audioPlayer.play().catch(error => {
                 console.log("Autoplay was prevented: ", error);
-                result.textContent = "Click the page to start audio";
+                result.textContent = "Click the SPIN button to start audio";
             });
             
             // Enable audio on user interaction
-            document.body.addEventListener('click', function() {
+            document.addEventListener('click', function() {
                 if (audioPlayer.paused) {
                     audioPlayer.play().then(() => {
                         result.textContent = "Audio started! Ready to spin!";
